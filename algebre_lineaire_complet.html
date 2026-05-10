@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algèbre Linéaire — Révision Complète LGLSI</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0f14;--bg2:#13161e;--bg3:#1a1e28;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8e6e0;--text2:#9a9690;--text3:#5a5650;--accent:#c8a96e;--accent2:#8fc4a8;--accent3:#7ba7d4;--red:#d46b6b;--mono:'DM Mono',monospace;--serif:'DM Serif Display',serif;--sans:'Outfit',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.7;min-height:100vh}
+.site{display:flex;height:100vh;overflow:hidden}
+
+/* ── Sidebar ── */
+.sidebar{width:270px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border);font-family:var(--serif);font-size:17px;color:var(--accent);line-height:1.2}
+.sidebar-logo span{display:block;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+.search-bar{padding:12px 14px;border-bottom:1px solid var(--border)}
+.search-bar input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:7px 12px;font-size:12px;color:var(--text);font-family:var(--sans);outline:none}
+.search-bar input:focus{border-color:rgba(200,169,110,.4)}
+.search-bar input::placeholder{color:var(--text3)}
+.nav-section{padding:14px 12px 6px;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 14px;margin:1px 6px;border-radius:7px;cursor:pointer;font-size:13px;color:var(--text2);border:none;background:none;width:calc(100% - 12px);text-align:left;transition:all .15s}
+.nav-item:hover{background:rgba(255,255,255,.04);color:var(--text)}
+.nav-item.active{background:rgba(200,169,110,.1);color:var(--accent)}
+.nav-badge{margin-left:auto;font-family:var(--mono);font-size:9px;background:rgba(255,255,255,.06);color:var(--text3);padding:2px 6px;border-radius:4px;white-space:nowrap}
+.progress{margin-top:auto;padding:14px;border-top:1px solid var(--border)}
+.prog-label{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em}
+.prog-bar{height:3px;background:var(--border2);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease}
+.prog-count{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px}
+
+/* ── Main ── */
+.main{flex:1;overflow-y:auto;background:var(--bg)}
+.page{display:none;padding:40px 48px 80px;max-width:900px;margin:0 auto}
+.page.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page-header{margin-bottom:40px;padding-bottom:28px;border-bottom:1px solid var(--border2)}
+.page-label{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.page-title{font-family:var(--serif);font-size:clamp(24px,4vw,40px);font-weight:400;margin-bottom:8px}
+.page-sub{color:var(--text2);font-size:13px;font-weight:300}
+
+/* ── Typography ── */
+h2.section-title{font-family:var(--serif);font-size:22px;font-weight:400;margin:36px 0 16px;display:flex;align-items:center;gap:12px}
+h2.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+strong{color:var(--text);font-weight:500}
+
+/* ── Cards ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin:12px 0}
+.card:hover{border-color:var(--border2)}
+.card-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.card p,.card li{font-size:14px;color:var(--text2);line-height:1.7}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}.page{padding:24px 16px 60px}}
+
+/* ── Formulas ── */
+.formula{font-family:var(--mono);font-size:13px;background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;color:var(--text);overflow-x:auto;white-space:pre-wrap;line-height:1.8}
+.formula.green{border-left-color:var(--accent2)}.formula.blue{border-left-color:var(--accent3)}.formula.red{border-left-color:var(--red)}
+
+/* ── Exercises ── */
+.exo-block{background:var(--bg2);border:1px solid var(--border);border-radius:12px;margin:20px 0;overflow:hidden}
+.exo-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+.exo-num{font-family:var(--mono);font-size:10px;color:var(--accent);background:rgba(200,169,110,.1);padding:3px 8px;border-radius:5px;letter-spacing:.08em;white-space:nowrap}
+.exo-title{font-size:14px;font-weight:500;color:var(--text);flex:1}
+.exo-toggle{font-size:18px;color:var(--text3);transition:transform .2s;margin-left:auto;flex-shrink:0}
+.exo-toggle.open{transform:rotate(45deg)}
+.exo-body{padding:20px;display:none}
+.exo-body.open{display:block}
+.question{margin:16px 0;padding:14px 16px;background:var(--bg3);border-radius:8px;border-left:2px solid var(--accent3)}
+.question-num{font-family:var(--mono);font-size:10px;color:var(--accent3);margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase}
+.question p{font-size:14px;color:var(--text2);line-height:1.65}
+.answer-btn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--bg2);color:var(--accent2);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .15s}
+.answer-btn:hover{border-color:var(--accent2);background:rgba(143,196,168,.06)}
+.answer-box{display:none;margin-top:12px;padding:14px 16px;background:rgba(143,196,168,.05);border:1px solid rgba(143,196,168,.2);border-radius:8px}
+.answer-box.open{display:block}
+.answer-box p,.answer-box li{font-size:13.5px;color:var(--text2);line-height:1.7}
+.answer-box ul{list-style:none;padding:0}
+.answer-box ul li{padding:3px 0}
+.answer-box ul li::before{content:'→ ';color:var(--accent2);font-family:var(--mono)}
+
+/* ── Lists & Tips ── */
+.step-list{list-style:none;counter-reset:st;padding:0}
+.step-list li{counter-increment:st;display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--text2)}
+.step-list li:last-child{border-bottom:none}
+.step-list li::before{content:counter(st);font-family:var(--mono);font-size:10px;color:var(--accent);background:rgba(200,169,110,.1);min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.tip{background:rgba(123,167,212,.07);border:1px solid rgba(123,167,212,.2);border-radius:8px;padding:12px 16px;font-size:13px;color:#a8c8e8;margin:10px 0}
+.tip strong{color:var(--accent3)}
+.warn{background:rgba(212,107,107,.07);border:1px solid rgba(212,107,107,.2);border-radius:8px;padding:12px 16px;font-size:13px;color:#e8a5a5;margin:10px 0}
+.warn strong{color:var(--red)}
+.highlight{background:linear-gradient(135deg,rgba(200,169,110,.06),rgba(200,169,110,.02));border:1px solid rgba(200,169,110,.2);border-radius:10px;padding:20px 24px;margin:12px 0}
+.highlight .hl-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.highlight p{font-size:14px;color:var(--text2)}
+
+/* ── Tables ── */
+.table-wrap{overflow-x:auto;margin:10px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{border-bottom:1px solid var(--border2)}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);text-align:left;padding:10px 12px;font-weight:400}
+td{padding:9px 12px;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td:first-child{font-family:var(--mono);font-size:12px;color:var(--accent)}
+
+/* ── Diagrams ── */
+.diagram-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.diagram-label::before{content:'◈';color:var(--accent2)}
+.diagram-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;overflow-x:auto}
+.diagram-box svg{display:block;max-width:100%;height:auto}
+
+/* ── Gauss stepper ── */
+.gauss-step{display:none}.gauss-step.active{display:block}
+.gauss-nav{display:flex;gap:8px;margin-top:16px;align-items:center;flex-wrap:wrap}
+.gauss-nav button{font-family:var(--mono);font-size:11px;padding:6px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;transition:all .15s}
+.gauss-nav button:hover{color:var(--text);border-color:rgba(200,169,110,.4)}
+.gauss-nav button.on{background:rgba(200,169,110,.1);color:var(--accent);border-color:rgba(200,169,110,.3)}
+.step-ctr{font-family:var(--mono);font-size:11px;color:var(--text3);margin-left:auto}
+.mat-grid{display:inline-grid;gap:3px 16px;font-family:var(--mono);font-size:13px;padding:10px 18px;border-left:2px solid var(--text3);border-right:2px solid var(--text3);vertical-align:middle;line-height:1.8}
+.mat-grid span.h{color:var(--accent)}.mat-grid span.p{color:var(--accent2);font-weight:500}.mat-grid span.z{color:var(--text3)}
+.op-note{font-family:var(--mono);font-size:11px;color:var(--accent3);margin:10px 0 6px}
+.arrow-mid{font-size:22px;color:var(--text3);margin:0 10px;vertical-align:middle}
+
+/* ── Quiz ── */
+.quiz-q{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin:14px 0}
+.quiz-q p{font-size:14px;color:var(--text);margin-bottom:14px;line-height:1.65}
+.quiz-opts{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{padding:9px 14px;border-radius:7px;border:1px solid var(--border2);background:var(--bg2);color:var(--text2);font-size:13px;cursor:pointer;transition:all .15s;text-align:left}
+.quiz-opt:hover{background:rgba(255,255,255,.04);color:var(--text)}
+.quiz-opt.correct{border-color:var(--accent2)!important;background:rgba(143,196,168,.1)!important;color:var(--accent2)!important}
+.quiz-opt.wrong{border-color:var(--red)!important;background:rgba(212,107,107,.08)!important;color:#e8a5a5!important}
+.quiz-feedback{margin-top:10px;padding:10px 14px;border-radius:7px;font-size:13px;display:none}
+.quiz-feedback.ok{background:rgba(143,196,168,.1);border:1px solid rgba(143,196,168,.25);color:var(--accent2);display:block}
+.quiz-feedback.nope{background:rgba(212,107,107,.08);border:1px solid rgba(212,107,107,.2);color:#e8a5a5;display:block}
+
+/* ── Videos ── */
+.video-section-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent3);margin:24px 0 10px;display:flex;align-items:center;gap:8px}
+.video-section-label::before{content:'▶';font-size:9px;background:rgba(123,167,212,.12);border:1px solid rgba(123,167,212,.22);border-radius:4px;padding:2px 6px}
+.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+@media(max-width:600px){.video-grid{grid-template-columns:1fr}}
+.video-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .2s}
+.video-card:hover{border-color:var(--border2)}
+.thumb-wrap{position:relative;padding-bottom:56.25%;background:#000}
+.thumb-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);transition:background .2s}
+.video-card:hover .play-overlay{background:rgba(0,0,0,.18)}
+.play-overlay svg{width:50px;height:50px;filter:drop-shadow(0 2px 10px rgba(0,0,0,.7))}
+.iframe-slot{display:none;position:relative;padding-bottom:56.25%}
+.iframe-slot iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.vid-meta{padding:12px 14px}
+.vid-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px;line-height:1.4}
+.vid-ch{font-family:var(--mono);font-size:10px;color:var(--text3)}
+.vid-lang-ar{color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="site">
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    Algèbre Linéaire
+    <span>1ère année LGLSI · 2025–2026</span>
+  </div>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Rechercher..." oninput="filterNav(this.value)">
+  </div>
+
+  <div class="nav-section">Fiches de cours</div>
+  <button class="nav-item active" onclick="showPage('fiche-matrices',this)">Matrices &amp; App. linéaires <span class="nav-badge">fiche</span></button>
+  <button class="nav-item" onclick="showPage('fiche-passage',this)">Matrice de passage <span class="nav-badge">schémas</span></button>
+  <button class="nav-item" onclick="showPage('cours-det',this)">Déterminants <span class="nav-badge">cours</span></button>
+
+  <div class="nav-section">Séries d'exercices</div>
+  <button class="nav-item" onclick="showPage('serie2',this)">Série 2 — Calcul matriciel <span class="nav-badge">6 ex.</span></button>
+  <button class="nav-item" onclick="showPage('serie3',this)">Série 3 — App. linéaires <span class="nav-badge">4 ex.</span></button>
+
+  <div class="nav-section">Entraînement</div>
+  <button class="nav-item" onclick="showPage('quiz',this)">Quiz interactif <span class="nav-badge">10 q.</span></button>
+
+  <div class="progress">
+    <div class="prog-label">Exercices vus</div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <div class="prog-count" id="progCount">0 / 10 exercices</div>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+<!-- ============================================================ -->
+<!-- PAGE 1: FICHE MATRICES & APPLICATIONS LINÉAIRES              -->
+<!-- ============================================================ -->
+<div class="page active" id="page-fiche-matrices">
+  <div class="page-header">
+    <div class="page-label">Chapitre II — Fiche de révision</div>
+    <div class="page-title">Matrices &amp; Applications Linéaires</div>
+    <div class="page-sub">Rang · Matrice de f · Changement de base · Noyau &amp; Image</div>
+  </div>
+
+  <!-- ── Rang ── -->
+  <h2 class="section-title">Rang d'une matrice</h2>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-label">Définition</div>
+      <p>Le rang de A, noté <strong>rg(A)</strong>, est la dimension de l'espace engendré par les colonnes (ou lignes) de A.</p>
+      <div class="formula">rg(A) = dim(Im(f_A))</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Propriétés clés</div>
+      <p>Pour A ∈ M_{p,q}(ℝ) :</p>
+      <div class="formula">rg(A) ≤ min(p, q)
+rg(A) = rg(ᵗA)
+A inversible ⟺ rg(A) = n</div>
+    </div>
+  </div>
+
+  <!-- Gauss interactif -->
+  <div class="diagram-label">Schéma interactif — Pivot de Gauss étape par étape</div>
+  <div class="diagram-box">
+    <div id="gauss-steps">
+      <div class="gauss-step active" id="gs0">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Matrice de départ A (4×3) — identifier le premier pivot :</p>
+        <div class="mat-grid" style="grid-template-columns:repeat(3,auto)">
+          <span class="p">1</span><span>1</span><span>−1</span>
+          <span>−2</span><span>0</span><span>1</span>
+          <span>1</span><span>3</span><span>−2</span>
+          <span>0</span><span>−4</span><span>2</span>
+        </div>
+        <p style="font-size:13px;color:var(--text2);margin-top:12px">Le <span style="color:var(--accent2)">pivot</span> est l'élément non nul utilisé pour éliminer la colonne en dessous.</p>
+      </div>
+      <div class="gauss-step" id="gs1">
+        <div class="op-note">L₂ ← L₂ + 2·L₁ &nbsp;|&nbsp; L₃ ← L₃ − L₁</div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px">
+          <div class="mat-grid" style="grid-template-columns:repeat(3,auto)">
+            <span class="p">1</span><span>1</span><span>−1</span>
+            <span>−2</span><span>0</span><span>1</span>
+            <span>1</span><span>3</span><span>−2</span>
+            <span>0</span><span>−4</span><span>2</span>
+          </div>
+          <span class="arrow-mid">→</span>
+          <div class="mat-grid" style="grid-template-columns:repeat(3,auto)">
+            <span class="p">1</span><span>1</span><span>−1</span>
+            <span class="h">0</span><span class="h">2</span><span class="h">−1</span>
+            <span class="h">0</span><span class="h">2</span><span class="h">−1</span>
+            <span>0</span><span>−4</span><span>2</span>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--text2);margin-top:10px">Zéros créés sous le premier pivot. Lignes modifiées en <span style="color:var(--accent)">doré</span>.</p>
+      </div>
+      <div class="gauss-step" id="gs2">
+        <div class="op-note">L₃ ← L₃ − L₂ &nbsp;|&nbsp; L₄ ← L₄ + 2·L₂</div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px">
+          <div class="mat-grid" style="grid-template-columns:repeat(3,auto)">
+            <span class="p">1</span><span>1</span><span>−1</span>
+            <span>0</span><span>2</span><span>−1</span>
+            <span>0</span><span>2</span><span>−1</span>
+            <span>0</span><span>−4</span><span>2</span>
+          </div>
+          <span class="arrow-mid">→</span>
+          <div class="mat-grid" style="grid-template-columns:repeat(3,auto)">
+            <span class="p">1</span><span>1</span><span>−1</span>
+            <span>0</span><span class="p">2</span><span>−1</span>
+            <span class="h">0</span><span class="h">0</span><span class="h">0</span>
+            <span class="h">0</span><span class="h">0</span><span class="h">0</span>
+          </div>
+        </div>
+      </div>
+      <div class="gauss-step" id="gs3">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Forme échelonnée finale :</p>
+        <div class="mat-grid" style="grid-template-columns:repeat(3,auto)">
+          <span class="p">1</span><span>1</span><span>−1</span>
+          <span>0</span><span class="p">2</span><span>−1</span>
+          <span class="z">0</span><span class="z">0</span><span class="z">0</span>
+          <span class="z">0</span><span class="z">0</span><span class="z">0</span>
+        </div>
+        <div class="highlight" style="margin-top:14px">
+          <div class="hl-label">Résultat</div>
+          <p><strong>2 pivots</strong> = 2 lignes non nulles → <strong style="color:var(--accent2)">rg(A) = 2</strong></p>
+        </div>
+      </div>
+    </div>
+    <div class="gauss-nav">
+      <button onclick="gs(0)" id="gb0" class="on">Départ</button>
+      <button onclick="gs(1)" id="gb1">Étape 1</button>
+      <button onclick="gs(2)" id="gb2">Étape 2</button>
+      <button onclick="gs(3)" id="gb3">Résultat</button>
+      <span class="step-ctr" id="gctr">1 / 4</span>
+    </div>
+  </div>
+
+  <!-- VIDÉOS RANG -->
+  <div class="video-section-label">Vidéos — Rang &amp; Pivot de Gauss</div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'ilKsCrgPAw0')">
+        <img src="https://img.youtube.com/vi/ilKsCrgPAw0/mqdefault.jpg" alt="Rang matrice pivot Gauss">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-ilKsCrgPAw0"></div>
+      <div class="vid-meta"><div class="vid-title">Pivot de Gauss : déterminer le rang d'une matrice</div><div class="vid-ch">🇫🇷 Cours en français</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'qiHDlQR1n8E')">
+        <img src="https://img.youtube.com/vi/qiHDlQR1n8E/mqdefault.jpg" alt="Pivot Gauss systeme lineaire">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-qiHDlQR1n8E"></div>
+      <div class="vid-meta"><div class="vid-title">Algorithme du pivot de Gauss — cours et exemple</div><div class="vid-ch">🇫🇷 Cours en français</div></div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'Eg6CTCu8Iy8')">
+        <img src="https://img.youtube.com/vi/Eg6CTCu8Iy8/mqdefault.jpg" alt="Rang matrice arabe">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-Eg6CTCu8Iy8"></div>
+      <div class="vid-meta"><div class="vid-title">رتبة المصفوفة — Rang d'une matrice (méthode Gauss)</div><div class="vid-ch vid-lang-ar">🇹🇳🇩🇿 شرح بالعربية</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'Hxm3IFRaFNM')">
+        <img src="https://img.youtube.com/vi/Hxm3IFRaFNM/mqdefault.jpg" alt="Gauss Jordan arabe">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-Hxm3IFRaFNM"></div>
+      <div class="vid-meta"><div class="vid-title">طريقة غاوس جوردان لحل الأنظمة الخطية</div><div class="vid-ch vid-lang-ar">🇹🇳🇩🇿 شرح بالعربية</div></div>
+    </div>
+  </div>
+
+  <!-- ── Matrice de f ── -->
+  <h2 class="section-title">Matrice d'une application linéaire</h2>
+  <div class="highlight">
+    <div class="hl-label">Règle de construction</div>
+    <p>La <strong>j-ème colonne</strong> de M(f, B, B') = coordonnées de <strong>f(eⱼ)</strong> dans B'.</p>
+  </div>
+  <div class="card">
+    <div class="card-label">Construction colonne par colonne</div>
+    <ol class="step-list">
+      <li>Choisir une base B = (e₁,...,eₙ) de E et B' = (f₁,...,fₘ) de F.</li>
+      <li>Calculer f(eⱼ) pour chaque vecteur de base.</li>
+      <li>Écrire f(eⱼ) dans la base B' : f(eⱼ) = a₁ⱼf₁ + ··· + aₘⱼfₘ.</li>
+      <li>La j-ème colonne de M(f, B, B') est le vecteur (a₁ⱼ,...,aₘⱼ).</li>
+    </ol>
+  </div>
+  <div class="formula green">Si f : E → F, g : F → G alors M(g∘f) = M(g) · M(f)</div>
+
+  <!-- VIDÉOS APPLICATION LINÉAIRE -->
+  <div class="video-section-label">Vidéos — Matrice d'une application linéaire</div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'_169kFvTOSk')">
+        <img src="https://img.youtube.com/vi/_169kFvTOSk/mqdefault.jpg" alt="Matrice application linéaire bases canoniques">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-_169kFvTOSk"></div>
+      <div class="vid-meta"><div class="vid-title">Matrice d'une application linéaire — bases canoniques</div><div class="vid-ch">🇫🇷 L1 Algèbre linéaire</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'D12M2RLkGCw')">
+        <img src="https://img.youtube.com/vi/D12M2RLkGCw/mqdefault.jpg" alt="Matrice application linéaire bases quelconques">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-D12M2RLkGCw"></div>
+      <div class="vid-meta"><div class="vid-title">Matrice d'une application linéaire — bases quelconques</div><div class="vid-ch">🇫🇷 L1 Algèbre linéaire</div></div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'3cM1fQZDkpg')">
+        <img src="https://img.youtube.com/vi/3cM1fQZDkpg/mqdefault.jpg" alt="application lineaire arabe">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-3cM1fQZDkpg"></div>
+      <div class="vid-meta"><div class="vid-title">التطبيقات الخطية — مصفوفة تطبيق خطي</div><div class="vid-ch vid-lang-ar">🇹🇳🇩🇿 شرح بالعربية</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'kYB8IZa5AuE')">
+        <img src="https://img.youtube.com/vi/kYB8IZa5AuE/mqdefault.jpg" alt="noyau image application lineaire">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-kYB8IZa5AuE"></div>
+      <div class="vid-meta"><div class="vid-title">Noyau et Image d'une application linéaire</div><div class="vid-ch">🇫🇷 Cours complet</div></div>
+    </div>
+  </div>
+
+  <!-- ── Théorème du rang ── -->
+  <h2 class="section-title">Théorème du rang</h2>
+  <div class="card" style="border-color:rgba(200,169,110,.3)">
+    <div class="card-label">Théorème fondamental</div>
+    <div class="formula">dim Ker(f) + dim Im(f) = dim E</div>
+    <p style="font-size:14px;color:var(--text2);margin-top:10px">f injective ⟺ Ker(f) = {0} &nbsp;·&nbsp; f surjective ⟺ Im(f) = F &nbsp;·&nbsp; f bijective ⟺ inj + surj</p>
+  </div>
+
+  <!-- ── Changement de base ── -->
+  <h2 class="section-title">Changement de base</h2>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-label">Matrice de passage</div>
+      <p>P = P_{B→B'} : j-ème colonne = coordonnées de e'ⱼ dans B.</p>
+      <div class="formula">X = P · X'   (changement de coordonnées)</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Formule de changement</div>
+      <p>Pour un endomorphisme f : E → E :</p>
+      <div class="formula blue">M(f, B') = P⁻¹ · M(f, B) · P</div>
+    </div>
+  </div>
+  <div class="tip"><strong>Méthode :</strong> Construire P → calculer P⁻¹ → appliquer P⁻¹AP. Matrices semblables conservent det et trace.</div>
+
+  <!-- VIDÉOS CHANGEMENT DE BASE -->
+  <div class="video-section-label">Vidéos — Changement de base</div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'hjwXWRKPnKM')">
+        <img src="https://img.youtube.com/vi/hjwXWRKPnKM/mqdefault.jpg" alt="Changement de base matrice passage">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-hjwXWRKPnKM"></div>
+      <div class="vid-meta"><div class="vid-title">Changements de base et matrice de passage</div><div class="vid-ch">🇫🇷 Lê Nguyên Hoang · EPFL</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'krGagik5Pvw')">
+        <img src="https://img.youtube.com/vi/krGagik5Pvw/mqdefault.jpg" alt="Changement de base exemples">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-krGagik5Pvw"></div>
+      <div class="vid-meta"><div class="vid-title">Changement de base avec la matrice de passage — exemples</div><div class="vid-ch">🇫🇷 Cours en français</div></div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'6T_HgnjoYwM')">
+        <img src="https://img.youtube.com/vi/6T_HgnjoYwM/mqdefault.jpg" alt="changement de base arabe">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-6T_HgnjoYwM"></div>
+      <div class="vid-meta"><div class="vid-title">تغيير القاعدة — مصفوفة الانتقال بالعربية</div><div class="vid-ch vid-lang-ar">🇹🇳🇩🇿 شرح بالعربية</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'P2LTAUO1TdA')">
+        <img src="https://img.youtube.com/vi/P2LTAUO1TdA/mqdefault.jpg" alt="matrices semblables diagonalisation">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-P2LTAUO1TdA"></div>
+      <div class="vid-meta"><div class="vid-title">Matrices semblables &amp; diagonalisation</div><div class="vid-ch">🇫🇷 Cours complet</div></div>
+    </div>
+  </div>
+
+  <!-- ── Récap formules ── -->
+  <h2 class="section-title">Récapitulatif des formules</h2>
+  <div class="card" style="padding:0;overflow:hidden">
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Formule</th><th>Signification</th><th>Condition</th></tr></thead>
+      <tbody>
+        <tr><td>rg(A) ≤ min(p,q)</td><td>Borne supérieure du rang</td><td>A ∈ Mₚ,q</td></tr>
+        <tr><td>det(A) ≠ 0</td><td>A inversible ⟺ rg = n</td><td>A carrée n×n</td></tr>
+        <tr><td>M(g∘f) = M(g)·M(f)</td><td>Composition → produit matriciel</td><td>Bases compatibles</td></tr>
+        <tr><td>M(f,B') = P⁻¹MP</td><td>Même endomorphisme, nouvelle base</td><td>f : E→E</td></tr>
+        <tr><td>dim Ker + dim Im = dim E</td><td>Théorème du rang</td><td>f : E → F</td></tr>
+        <tr><td>det(AB) = det(A)·det(B)</td><td>Multiplicativité</td><td>A,B carrées</td></tr>
+        <tr><td>A⁻¹ = (1/det A)·adj(A)</td><td>Formule de l'inverse</td><td>det A ≠ 0</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- PAGE 2: FICHE MATRICE DE PASSAGE (avec schémas SVG)          -->
+<!-- ============================================================ -->
+<div class="page" id="page-fiche-passage">
+  <div class="page-header">
+    <div class="page-label">Chapitre II — Fiche schémas</div>
+    <div class="page-title">Matrice de passage &amp; Diagrammes</div>
+    <div class="page-sub">Schémas interactifs · Noyau &amp; Image · Changement de base · Méthode complète</div>
+  </div>
+
+  <!-- ── Section Noyau & Image ── -->
+  <h2 class="section-title">Noyau, Image &amp; Théorème du rang</h2>
+  <div class="diagram-label">Schéma — Noyau et Image d'une application linéaire</div>
+  <div class="diagram-box">
+    <svg viewBox="0 0 760 195" xmlns="http://www.w3.org/2000/svg" style="font-family:'Outfit',sans-serif">
+      <defs>
+        <marker id="b1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#8fc4a8" stroke-width="1.5" stroke-linecap="round"/></marker>
+        <marker id="b2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#5a5650" stroke-width="1.5" stroke-linecap="round"/></marker>
+      </defs>
+      <ellipse cx="195" cy="90" rx="170" ry="74" fill="rgba(123,167,212,.06)" stroke="rgba(123,167,212,.28)" stroke-width="1"/>
+      <text x="195" y="22" text-anchor="middle" fill="#7ba7d4" font-size="14" font-weight="500">E</text>
+      <ellipse cx="130" cy="90" rx="78" ry="50" fill="rgba(212,107,107,.1)" stroke="rgba(212,107,107,.35)" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="130" y="79" text-anchor="middle" fill="#d46b6b" font-size="13" font-weight="500">Ker(f)</text>
+      <text x="130" y="96" text-anchor="middle" fill="#9a9690" font-size="11">f(x) = 0</text>
+      <circle cx="130" cy="114" r="4" fill="#d46b6b" opacity=".7"/>
+      <text x="148" y="118" fill="#9a9690" font-size="11">0_E</text>
+      <circle cx="248" cy="74" r="3" fill="#7ba7d4" opacity=".7"/>
+      <circle cx="268" cy="104" r="3" fill="#7ba7d4" opacity=".7"/>
+      <text x="266" y="69" fill="#9a9690" font-size="11">x</text>
+      <text x="383" y="48" text-anchor="middle" fill="#8fc4a8" font-size="15" font-style="italic">f</text>
+      <line x1="272" y1="74" x2="438" y2="78" stroke="#8fc4a8" stroke-width="1.5" marker-end="url(#b1)"/>
+      <line x1="272" y1="104" x2="438" y2="110" stroke="#8fc4a8" stroke-width="1.5" marker-end="url(#b1)"/>
+      <line x1="158" y1="114" x2="440" y2="134" stroke="#5a5650" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#b2)"/>
+      <ellipse cx="565" cy="90" rx="170" ry="74" fill="rgba(143,196,168,.05)" stroke="rgba(143,196,168,.28)" stroke-width="1"/>
+      <text x="565" y="22" text-anchor="middle" fill="#8fc4a8" font-size="14" font-weight="500">F</text>
+      <ellipse cx="528" cy="88" rx="82" ry="50" fill="rgba(143,196,168,.1)" stroke="rgba(143,196,168,.38)" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="528" y="58" text-anchor="middle" fill="#8fc4a8" font-size="13" font-weight="500">Im(f)</text>
+      <circle cx="480" cy="80" r="3" fill="#8fc4a8" opacity=".8"/>
+      <circle cx="510" cy="105" r="3" fill="#8fc4a8" opacity=".8"/>
+      <circle cx="490" cy="132" r="4" fill="#8fc4a8" opacity=".4"/>
+      <text x="458" y="136" fill="#9a9690" font-size="11">0_F</text>
+      <rect x="10" y="162" width="740" height="26" rx="6" fill="rgba(200,169,110,.06)" stroke="rgba(200,169,110,.15)" stroke-width="1"/>
+      <text x="380" y="179" text-anchor="middle" fill="#c8a96e" font-size="12" font-family="'DM Mono',monospace">dim(Ker f) + dim(Im f) = dim(E)   —   Théorème du rang</text>
+    </svg>
+  </div>
+
+  <!-- ── Matrice de passage ── -->
+  <h2 class="section-title">Matrice de passage P_{B→B'}</h2>
+  <div class="highlight">
+    <div class="hl-label">Définition — P<sub>B→B'</sub></div>
+    <p>La <strong>j-ème colonne</strong> = coordonnées de <strong>e'ⱼ exprimées dans B</strong>.</p>
+    <div class="formula" style="margin-top:10px">P_{B→B'} = M(Id_E, B', B)</div>
+  </div>
+  <div class="warn"><strong>⚠ Piège fréquent :</strong> On exprime les vecteurs de B' dans B (pas l'inverse). Toujours vérifier l'ordre !</div>
+
+  <div class="diagram-label">Schéma — Rôle de la matrice de passage</div>
+  <div class="diagram-box">
+    <svg viewBox="0 0 760 215" xmlns="http://www.w3.org/2000/svg" style="font-family:'Outfit',sans-serif">
+      <defs>
+        <marker id="p1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#c8a96e" stroke-width="1.5" stroke-linecap="round"/></marker>
+        <marker id="p2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#8fc4a8" stroke-width="1.5" stroke-linecap="round"/></marker>
+      </defs>
+      <rect x="50" y="68" width="145" height="68" rx="10" fill="rgba(123,167,212,.08)" stroke="rgba(123,167,212,.3)" stroke-width="1"/>
+      <text x="122" y="97" text-anchor="middle" fill="#7ba7d4" font-size="14" font-weight="500">Base B</text>
+      <text x="122" y="118" text-anchor="middle" fill="#9a9690" font-size="12">(e₁, …, eₙ)</text>
+      <rect x="565" y="68" width="145" height="68" rx="10" fill="rgba(200,169,110,.08)" stroke="rgba(200,169,110,.3)" stroke-width="1"/>
+      <text x="637" y="97" text-anchor="middle" fill="#c8a96e" font-size="14" font-weight="500">Base B'</text>
+      <text x="637" y="118" text-anchor="middle" fill="#9a9690" font-size="12">(e'₁, …, e'ₙ)</text>
+      <path d="M197 92 Q380 28 563 92" fill="none" stroke="#c8a96e" stroke-width="1.5" marker-end="url(#p1)"/>
+      <rect x="328" y="22" width="104" height="26" rx="6" fill="var(--bg2)" stroke="rgba(200,169,110,.25)" stroke-width="1"/>
+      <text x="380" y="39" text-anchor="middle" fill="#c8a96e" font-size="12" font-family="'DM Mono',monospace">P = P_{B→B'}</text>
+      <path d="M563 115 Q380 180 197 115" fill="none" stroke="#8fc4a8" stroke-width="1.5" marker-end="url(#p2)"/>
+      <rect x="320" y="162" width="120" height="26" rx="6" fill="var(--bg2)" stroke="rgba(143,196,168,.25)" stroke-width="1"/>
+      <text x="380" y="179" text-anchor="middle" fill="#8fc4a8" font-size="12" font-family="'DM Mono',monospace">P⁻¹ = P_{B'→B}</text>
+      <rect x="218" y="78" width="112" height="48" rx="8" fill="rgba(200,169,110,.05)" stroke="rgba(200,169,110,.15)" stroke-width="1"/>
+      <text x="274" y="98" text-anchor="middle" fill="#9a9690" font-size="12">X (dans B)</text>
+      <text x="274" y="116" text-anchor="middle" fill="#c8a96e" font-size="12" font-family="'DM Mono',monospace">X = P·X'</text>
+      <rect x="430" y="78" width="120" height="48" rx="8" fill="rgba(143,196,168,.05)" stroke="rgba(143,196,168,.15)" stroke-width="1"/>
+      <text x="490" y="98" text-anchor="middle" fill="#9a9690" font-size="12">X' (dans B')</text>
+      <text x="490" y="116" text-anchor="middle" fill="#8fc4a8" font-size="12" font-family="'DM Mono',monospace">X' = P⁻¹·X</text>
+      <text x="380" y="206" text-anchor="middle" fill="#5a5650" font-size="12">même vecteur x ∈ E — deux représentations</text>
+    </svg>
+  </div>
+
+  <!-- ── Diagramme commutatif ── -->
+  <h2 class="section-title">Changement de base — Formule centrale</h2>
+  <div class="highlight">
+    <div class="hl-label">⭐ Théorème à maîtriser — Endomorphisme f : E → E</div>
+    <div class="formula red" style="font-size:15px;padding:14px 18px;">M(f, B') = P⁻¹ · M(f, B) · P
+où P = P_{B→B'}</div>
+  </div>
+  <div class="diagram-label">Schéma — Diagramme commutatif</div>
+  <div class="diagram-box">
+    <svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg" style="font-family:'Outfit',sans-serif">
+      <defs>
+        <marker id="c1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#7ba7d4" stroke-width="1.5" stroke-linecap="round"/></marker>
+        <marker id="c2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#c8a96e" stroke-width="1.5" stroke-linecap="round"/></marker>
+        <marker id="c3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#d46b6b" stroke-width="2" stroke-linecap="round"/></marker>
+      </defs>
+      <rect x="60" y="30" width="155" height="58" rx="10" fill="rgba(123,167,212,.1)" stroke="rgba(123,167,212,.35)" stroke-width="1"/>
+      <text x="137" y="54" text-anchor="middle" fill="#7ba7d4" font-size="13" font-weight="500">(E, base B)</text>
+      <text x="137" y="74" text-anchor="middle" fill="#9a9690" font-size="12">coordonnées X</text>
+      <rect x="545" y="30" width="155" height="58" rx="10" fill="rgba(123,167,212,.1)" stroke="rgba(123,167,212,.35)" stroke-width="1"/>
+      <text x="622" y="54" text-anchor="middle" fill="#7ba7d4" font-size="13" font-weight="500">(E, base B)</text>
+      <text x="622" y="74" text-anchor="middle" fill="#9a9690" font-size="12">coordonnées AX</text>
+      <rect x="60" y="152" width="155" height="58" rx="10" fill="rgba(200,169,110,.1)" stroke="rgba(200,169,110,.35)" stroke-width="1"/>
+      <text x="137" y="176" text-anchor="middle" fill="#c8a96e" font-size="13" font-weight="500">(E, base B')</text>
+      <text x="137" y="196" text-anchor="middle" fill="#9a9690" font-size="12">coordonnées X'</text>
+      <rect x="545" y="152" width="155" height="58" rx="10" fill="rgba(200,169,110,.1)" stroke="rgba(200,169,110,.35)" stroke-width="1"/>
+      <text x="622" y="176" text-anchor="middle" fill="#c8a96e" font-size="13" font-weight="500">(E, base B')</text>
+      <text x="622" y="196" text-anchor="middle" fill="#9a9690" font-size="12">coordonnées A'X'</text>
+      <line x1="217" y1="59" x2="543" y2="59" stroke="#7ba7d4" stroke-width="1.5" marker-end="url(#c1)"/>
+      <text x="380" y="49" text-anchor="middle" fill="#7ba7d4" font-size="13" font-family="'DM Mono',monospace">A = M(f, B)</text>
+      <line x1="217" y1="181" x2="543" y2="181" stroke="#d46b6b" stroke-width="2" marker-end="url(#c3)"/>
+      <text x="380" y="171" text-anchor="middle" fill="#d46b6b" font-size="13" font-family="'DM Mono',monospace">A' = P⁻¹AP = M(f, B')</text>
+      <line x1="137" y1="90" x2="137" y2="150" stroke="#c8a96e" stroke-width="1.5" marker-end="url(#c2)"/>
+      <text x="98" y="126" text-anchor="middle" fill="#c8a96e" font-size="13" font-family="'DM Mono',monospace">P</text>
+      <line x1="622" y1="90" x2="622" y2="150" stroke="#c8a96e" stroke-width="1.5" marker-end="url(#c2)"/>
+      <text x="655" y="126" text-anchor="middle" fill="#c8a96e" font-size="13" font-family="'DM Mono',monospace">P</text>
+      <text x="380" y="122" text-anchor="middle" fill="#5a5650" font-size="24">↻</text>
+      <text x="380" y="142" text-anchor="middle" fill="#5a5650" font-size="11">diagramme commutatif</text>
+    </svg>
+  </div>
+
+  <!-- ── Méthode pas-à-pas ── -->
+  <h2 class="section-title">Méthode pas-à-pas</h2>
+  <div class="card">
+    <ol class="step-list">
+      <li>Calculer <strong>M(f, B)</strong> dans la base canonique : appliquer f à chaque vecteur eⱼ et lire les coordonnées → colonnes.</li>
+      <li>Vérifier que <strong>B' est une base</strong> : système libre → det ≠ 0 (carré) ou rang = dimension.</li>
+      <li>Construire <strong>P = P_{B→B'}</strong> : exprimer chaque e'ⱼ dans B → j-ème colonne de P.</li>
+      <li>Calculer <strong>P⁻¹</strong> = (1/det P) · Com(P)ᵀ &nbsp;(ou substitution si P triangulaire).</li>
+      <li>Appliquer : <strong>M(f, B') = P⁻¹ · M(f, B) · P</strong></li>
+    </ol>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="card-label">Exemple complet</div>
+    <p style="font-size:13.5px;color:var(--text2)">f : ℝ₂[X] → ℝ₂[X], B' = (1, X−2, (X−2)²)</p>
+    <div class="formula">M(f,B) = ⎡ 1 −1  1⎤   P_{B→B'} = ⎡ 1 −2  4⎤   P⁻¹ = ⎡1 2 4⎤
+         ⎢ 1  1  0⎥              ⎢ 0  1 −4⎥         ⎢0 1 4⎥
+         ⎣ 1  0 −2⎦              ⎣ 0  0  1⎦         ⎣0 0 1⎦
+
+M(f,B') = P⁻¹·M(f,B)·P = ⎡  7 −13 17⎤
+                           ⎢  5  −9  8⎥
+                           ⎣  1  −2  2⎦</div>
+  </div>
+
+  <!-- VIDÉOS PASSAGE -->
+  <div class="video-section-label">Vidéos — Matrice de passage &amp; changement de base</div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'XkY2DOUCWMU')">
+        <img src="https://img.youtube.com/vi/XkY2DOUCWMU/mqdefault.jpg" alt="matrice passage exemple">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-XkY2DOUCWMU"></div>
+      <div class="vid-meta"><div class="vid-title">Matrice de passage — exemples détaillés</div><div class="vid-ch">🇫🇷 Cours en français</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'4csuTO7UTMo')">
+        <img src="https://img.youtube.com/vi/4csuTO7UTMo/mqdefault.jpg" alt="matrice passage formule P-1AP">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-4csuTO7UTMo"></div>
+      <div class="vid-meta"><div class="vid-title">Formule P⁻¹AP — endomorphisme et changement de base</div><div class="vid-ch">🇫🇷 Cours complet</div></div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'9zWyO5_8MSo')">
+        <img src="https://img.youtube.com/vi/9zWyO5_8MSo/mqdefault.jpg" alt="مصفوفة الانتقال عربية">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-9zWyO5_8MSo"></div>
+      <div class="vid-meta"><div class="vid-title">مصفوفة الانتقال وتغيير القاعدة — شرح مفصل</div><div class="vid-ch vid-lang-ar">🇹🇳🇩🇿 شرح بالعربية</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'xX7L4m9wrSU')">
+        <img src="https://img.youtube.com/vi/xX7L4m9wrSU/mqdefault.jpg" alt="تطبيق خطي ونواة وصورة عربي">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-xX7L4m9wrSU"></div>
+      <div class="vid-meta"><div class="vid-title">نواة وصورة التطبيق الخطي — مع تطبيقات</div><div class="vid-ch vid-lang-ar">🇹🇳🇩🇿 شرح بالعربية</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- PAGE 3: COURS DÉTERMINANTS                                    -->
+<!-- ============================================================ -->
+<div class="page" id="page-cours-det">
+  <div class="page-header">
+    <div class="page-label">Chapitre II — Cours complet</div>
+    <div class="page-title">Déterminants</div>
+    <div class="page-sub">Ordres 2 et 3 · Cofacteurs · Inverse · Règle de Cramer</div>
+  </div>
+
+  <h2 class="section-title">Déterminant d'ordre 2</h2>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-label">Définition</div>
+      <div class="formula">det A = |a₁₁  a₁₂|
+        |a₂₁  a₂₂|
+      = a₁₁·a₂₂ - a₁₂·a₂₁</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Exemples</div>
+      <div class="formula green">|1  3|
+|2  4| = 4 - 6 = -2
+
+|2  4|
+|1  3| = 6 - 4 = 2</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Déterminant d'ordre 3</h2>
+  <div class="card">
+    <div class="card-label">Développement selon la 1ère colonne</div>
+    <div class="formula">det A = a₁₁·|a₂₂ a₂₃| - a₂₁·|a₁₂ a₁₃| + a₃₁·|a₁₂ a₁₃|
+              |a₃₂ a₃₃|          |a₃₂ a₃₃|          |a₂₂ a₂₃|</div>
+    <div class="tip" style="margin-top:12px"><strong>Astuce :</strong> Développer selon la ligne/colonne qui a le plus de zéros.</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Table des signes des cofacteurs</div>
+    <div class="formula blue">+ − +
+− + −
++ − +
+
+Cofacteur Cᵢₖ = (−1)^(i+k) × mineur(i,k)</div>
+  </div>
+
+  <!-- VIDÉOS DÉTERMINANTS -->
+  <div class="video-section-label">Vidéos — Déterminants</div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'Ip3X9LOh2dk')">
+        <img src="https://img.youtube.com/vi/Ip3X9LOh2dk/mqdefault.jpg" alt="déterminant ordre 3 français">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-Ip3X9LOh2dk"></div>
+      <div class="vid-meta"><div class="vid-title">Calcul d'un déterminant 3×3 — méthode des cofacteurs</div><div class="vid-ch">🇫🇷 Cours en français</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'jBsC4HosEBc')">
+        <img src="https://img.youtube.com/vi/jBsC4HosEBc/mqdefault.jpg" alt="determinant proprietes">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-jBsC4HosEBc"></div>
+      <div class="vid-meta"><div class="vid-title">Propriétés des déterminants — cours complet</div><div class="vid-ch">🇫🇷 Cours en français</div></div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'KBTOVWHgGCo')">
+        <img src="https://img.youtube.com/vi/KBTOVWHgGCo/mqdefault.jpg" alt="محدد مصفوفة عربي">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-KBTOVWHgGCo"></div>
+      <div class="vid-meta"><div class="vid-title">محددات المصفوفات — الخصائص والحساب بالعربية</div><div class="vid-ch vid-lang-ar">🇹🇳🇩🇿 شرح بالعربية</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'v4MenookNMo')">
+        <img src="https://img.youtube.com/vi/v4MenookNMo/mqdefault.jpg" alt="regle cramer inverse matrice">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-v4MenookNMo"></div>
+      <div class="vid-meta"><div class="vid-title">Règle de Cramer &amp; inverse par cofacteurs</div><div class="vid-ch">🇫🇷 Cours en français</div></div>
+    </div>
+  </div>
+
+  <h2 class="section-title">8 Propriétés essentielles</h2>
+  <div class="card">
+    <ol class="step-list">
+      <li>Permuter deux lignes (ou colonnes) multiplie le déterminant par −1.</li>
+      <li>det(A) = det(ᵗA) : la transposition conserve la valeur.</li>
+      <li>Multiplier une ligne par k multiplie le déterminant par k.</li>
+      <li>Si tous les éléments d'une ligne sont nuls → det = 0.</li>
+      <li>Si deux lignes sont proportionnelles → det = 0.</li>
+      <li>Ajouter à une ligne une combinaison linéaire des autres → det inchangé.</li>
+      <li>det(AB) = det(A) · det(B).</li>
+      <li>det(A⁻¹) = 1 / det(A) si A inversible.</li>
+    </ol>
+  </div>
+
+  <h2 class="section-title">Calcul de l'inverse (méthode des cofacteurs)</h2>
+  <div class="card">
+    <div class="card-label">Formule</div>
+    <div class="formula">A⁻¹ = (1/det A) · adj(A)    où adj(A) = ᵗ[Cᵢⱼ]</div>
+  </div>
+  <div class="card" style="border-color:rgba(200,169,110,.25)">
+    <div class="card-label">Exemple — A = [[2,3,-4],[0,-4,2],[1,-1,5]]</div>
+    <div class="formula">det A = -46 ≠ 0 → A est inversible
+
+Cofacteurs : C₁₁=-18, C₁₂=2,   C₁₃=4
+             C₂₁=-11, C₂₂=14,  C₂₃=5
+             C₃₁=-10, C₃₂=-4,  C₃₃=-8
+
+A⁻¹ = (-1/46) · [[-18 -11 -10]
+                  [  2  14  -4]
+                  [  4   5  -8]]</div>
+  </div>
+
+  <h2 class="section-title">Règle de Cramer</h2>
+  <div class="card">
+    <div class="card-label">Résolution de AX = b (si det A ≠ 0)</div>
+    <div class="formula blue">xᵢ = det(Bᵢ) / det(A)
+
+où Bᵢ = A avec la i-ème colonne remplacée par b</div>
+  </div>
+  <div class="warn">La méthode de Gauss reste la plus efficace pour les grands systèmes. Cramer est surtout utile pour les systèmes 2×2 ou 3×3.</div>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- PAGE 4: SÉRIE 2                                               -->
+<!-- ============================================================ -->
+<div class="page" id="page-serie2">
+  <div class="page-header">
+    <div class="page-label">Série 2 · LGLSI 2025–2026</div>
+    <div class="page-title">Calcul matriciel</div>
+    <div class="page-sub">Commutants · Transposée · Puissances de matrices · Invertibilité</div>
+  </div>
+
+  <!-- VIDÉOS SÉRIE 2 -->
+  <div class="video-section-label">Vidéos — Produit matriciel &amp; puissances de matrices</div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'OMA2Mwo0aZg')">
+        <img src="https://img.youtube.com/vi/OMA2Mwo0aZg/mqdefault.jpg" alt="puissances de matrices nilpotentes">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-OMA2Mwo0aZg"></div>
+      <div class="vid-meta"><div class="vid-title">Matrices nilpotentes et puissances Aⁿ</div><div class="vid-ch">🇫🇷 Cours en français</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'rowWM-MijXU')">
+        <img src="https://img.youtube.com/vi/rowWM-MijXU/mqdefault.jpg" alt="polynome annulateur matrice">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-rowWM-MijXU"></div>
+      <div class="vid-meta"><div class="vid-title">Polynôme annulateur et inverse d'une matrice</div><div class="vid-ch">🇫🇷 Cours en français</div></div>
+    </div>
+  </div>
+
+  <div class="exo-block">
+    <div class="exo-header" onclick="toggleExo(this)">
+      <span class="exo-num">Exercice 1</span>
+      <span class="exo-title">Matrices commutant avec A = [[a,b],[0,a]]</span>
+      <span class="exo-toggle">+</span>
+    </div>
+    <div class="exo-body">
+      <p style="font-size:14px;color:var(--text2);margin-bottom:16px">Soient a et b ≠ 0 deux réels. A = [[a,b],[0,a]]. Trouver toutes les matrices B ∈ M₂(ℝ) telles que AB = BA.</p>
+      <div class="question">
+        <div class="question-num">Question unique</div>
+        <p>Déterminer l'ensemble des matrices B qui commutent avec A.</p>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <p>On pose B = [[p,q],[r,s]]. On calcule AB et BA et on égalise :</p>
+          <div class="formula">AB = BA impose :
+  br = 0 → r = 0  (car b ≠ 0)
+  b(s-p) = a(s-q) → avec r=0 : p = s (lib.)
+  q libre</div>
+          <div class="formula green">B = [[p, q],[0, p]]  avec p, q ∈ ℝ quelconques
+B = p·I + q·N   où N = [[0,1],[0,0]]
+→ Les commutants de A sont les polynômes en A.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exo-block">
+    <div class="exo-header" onclick="toggleExo(this)">
+      <span class="exo-num">Exercice 2</span>
+      <span class="exo-title">Produits AB, BA · Transposée · Noyau AC = 0</span>
+      <span class="exo-toggle">+</span>
+    </div>
+    <div class="exo-body">
+      <p style="font-size:14px;color:var(--text2);margin-bottom:14px">A ∈ M₃ₓ₂(ℝ) (colonnes : (-1,-2,1) et (2,4,-2)). B ∈ M₄ₓ₃(ℝ).</p>
+      <div class="question">
+        <div class="question-num">Question 1 — AB et BA</div>
+        <p>Peut-on calculer AB ? BA ?</p>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula">A : 3×2,   B : 4×3
+AB : (3×2)·(4×3) → dimensions incompatibles → AB n'existe PAS.
+BA : (4×3)·(3×2) → résultat (4×2) → BA existe ✓</div>
+          <div class="formula green">BA = [[-1, 2],[-1, 2],[-10, 20],[0, 0]]
+(les lignes sont proportionnelles → rg(BA) = 1)</div>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-num">Question 2 — Transposée</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula green">Propriété fondamentale : ᵗ(BA) = ᵗA · ᵗB ✓</div>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-num">Questions 3 &amp; 4 — F = {C | AC = 0}</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula">C = [[p,q],[r,s]]. AC = 0 donne :
+  -p + 2r = 0  →  p = 2r
+  q et s libres</div>
+          <div class="formula green">Base de F : {[[2,0],[1,0]], [[0,1],[0,0]], [[0,0],[0,1]]}
+dim(F) = 3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exo-block">
+    <div class="exo-header" onclick="toggleExo(this)">
+      <span class="exo-num">Exercice 3</span>
+      <span class="exo-title">A² · Polynôme annulateur · Aⁿ (nilpotence)</span>
+      <span class="exo-toggle">+</span>
+    </div>
+    <div class="exo-body">
+      <div class="question">
+        <div class="question-num">Partie I — A = [[0,1,1],[1,0,1],[1,1,0]]</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula">A² = [[2,1,1],[1,2,1],[1,1,2]]
+P(X) = X² - X - 2 = (X-2)(X+1)</div>
+          <div class="formula green">A² - A - 2I = 0
+→ A⁻¹ = (1/2)(A - I)
+
+A⁻¹ = (1/2) · [[-1, 1, 1],
+                 [ 1,-1, 1],
+                 [ 1, 1,-1]]</div>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-num">Partie II — Aⁿ (nilpotence)</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula">B³ = 0  →  Bⁿ = 0 pour tout n ≥ 3</div>
+          <div class="formula green">Aⁿ = [[1,  n,  n(n+1)/2],
+       [0,  1,      n   ],
+       [0,  0,      1   ]]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exo-block">
+    <div class="exo-header" onclick="toggleExo(this)">
+      <span class="exo-num">Exercice 4</span>
+      <span class="exo-title">N = A − I nilpotente · Aⁿ · A⁻¹ · A⁻ⁿ</span>
+      <span class="exo-toggle">+</span>
+    </div>
+    <div class="exo-body">
+      <p style="font-size:14px;color:var(--text2);margin-bottom:14px">A = [[1,-1,1],[0,1,-2],[0,0,1]], N = A − I.</p>
+      <div class="question">
+        <div class="question-num">Questions 1 &amp; 2 — Aⁿ</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula">N³ = 0  →  Nⁿ = 0 pour n ≥ 3</div>
+          <div class="formula green">Aⁿ = [[1,  -n,   n(n-1)],
+       [0,   1,     -2n ],
+       [0,   0,       1 ]]</div>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-num">Questions 3–5 — A⁻¹ et A⁻ⁿ</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula green">A⁻¹ = I - N + N²
+
+A⁻ⁿ = [[1,  n,  n(n+1)],
+        [0,  1,    2n  ],
+        [0,  0,    1   ]]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exo-block">
+    <div class="exo-header" onclick="toggleExo(this)">
+      <span class="exo-num">Exercice 5</span>
+      <span class="exo-title">A(t) = exp d'une matrice · A(t)·A(s) = A(t+s)</span>
+      <span class="exo-toggle">+</span>
+    </div>
+    <div class="exo-body">
+      <div class="question">
+        <div class="question-num">A(t)ⁿ et A(t)⁻¹</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula green">A(t)ⁿ = A(nt)  (propriété de groupe !)
+A(t)⁻¹ = A(−t)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exo-block">
+    <div class="exo-header" onclick="toggleExo(this)">
+      <span class="exo-num">Exercice 6</span>
+      <span class="exo-title">A² = 4A · Aⁿ = 4^(n-1)A · Binôme B = I + A</span>
+      <span class="exo-toggle">+</span>
+    </div>
+    <div class="exo-body">
+      <p style="font-size:14px;color:var(--text2);margin-bottom:14px">A = [[5,-2,-3],[1,2,-3],[1,-2,1]]</p>
+      <div class="question">
+        <div class="question-num">Question 1 — A² = 4A et Aⁿ</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula green">Aⁿ = 4^(n-1) · A  pour n ≥ 1</div>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-num">Question 3 — Bⁿ = I + (5ⁿ−1)/4 · A</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula green">Bⁿ = I + (5ⁿ - 1)/4 · A  ✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- PAGE 5: SÉRIE 3                                               -->
+<!-- ============================================================ -->
+<div class="page" id="page-serie3">
+  <div class="page-header">
+    <div class="page-label">Série 3 · LGLSI 2023–2024</div>
+    <div class="page-title">Applications linéaires &amp; Endomorphismes</div>
+    <div class="page-sub">Bases de fonctions · Matrices d'applications · Noyau &amp; Image · Diagonalisation</div>
+  </div>
+
+  <!-- VIDÉOS SÉRIE 3 -->
+  <div class="video-section-label">Vidéos — Endomorphismes &amp; diagonalisation</div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'PFDu1oECbD0')">
+        <img src="https://img.youtube.com/vi/PFDu1oECbD0/mqdefault.jpg" alt="diagonalisation valeurs propres">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-PFDu1oECbD0"></div>
+      <div class="vid-meta"><div class="vid-title">Diagonalisation — valeurs propres et vecteurs propres</div><div class="vid-ch">🇫🇷 Cours en français</div></div>
+    </div>
+    <div class="video-card">
+      <div class="thumb-wrap" onclick="ytLoad(this,'8F0gdO64MCQ')">
+        <img src="https://img.youtube.com/vi/8F0gdO64MCQ/mqdefault.jpg" alt="endomorphisme matrice arabe">
+        <div class="play-overlay"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="rgba(0,0,0,.55)"/><polygon points="30,22 62,40 30,58" fill="white"/></svg></div>
+      </div>
+      <div class="iframe-slot" id="yt-8F0gdO64MCQ"></div>
+      <div class="vid-meta"><div class="vid-title">القيم الذاتية والمتجهات الذاتية — التقطير بالعربية</div><div class="vid-ch vid-lang-ar">🇹🇳🇩🇿 شرح بالعربية</div></div>
+    </div>
+  </div>
+
+  <div class="exo-block">
+    <div class="exo-header" onclick="toggleExo(this)">
+      <span class="exo-num">Exercice 1</span>
+      <span class="exo-title">S = (cos, sin, exp) — Base de E · Matrice de φ : f ↦ f'</span>
+      <span class="exo-toggle">+</span>
+    </div>
+    <div class="exo-body">
+      <div class="question">
+        <div class="question-num">Question 1 — S est une base de E</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula">En x=0 :   α + γ = 0
+En x=π/2 : β + γ·e^(π/2) = 0
+En x=π :  -α + γ·eᵖ = 0
+
+→ γ = 0, α = 0, β = 0. ✓</div>
+          <div class="formula green">S est libre et génératrice → S est une base de E.</div>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-num">Question 2 — Matrice de φ : f ↦ f'</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula">φ(cos) = -sin  →  colonne 1 : [ 0, -1, 0]
+φ(sin) =  cos  →  colonne 2 : [ 1,  0, 0]
+φ(exp) =  exp  →  colonne 3 : [ 0,  0, 1]</div>
+          <div class="formula green">M(φ, S) = [[ 0,  1, 0],
+             [-1,  0, 0],
+             [ 0,  0, 1]]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exo-block">
+    <div class="exo-header" onclick="toggleExo(this)">
+      <span class="exo-num">Exercice 2</span>
+      <span class="exo-title">f : ℝ³→ℝ², g : ℝ²→ℝ³ · AB, BA, (AB)⁻¹, (f∘g)²</span>
+      <span class="exo-toggle">+</span>
+    </div>
+    <div class="exo-body">
+      <p style="font-size:14px;color:var(--text2);margin-bottom:14px">f(x,y,z) = (2x−z, 3x+y+2z) &nbsp;·&nbsp; g(x,y) = (x+y, −y, 2x−y)</p>
+      <div class="question">
+        <div class="question-num">Question 1 — Matrices A et B</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula">A = [[ 2,  0, -1],   (2×3)
+     [ 3,  1,  2]]
+
+B = [[ 1,  1],   (3×2)
+     [ 0, -1],
+     [ 2, -1]]</div>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-num">Questions 2, 3 — AB, (AB)⁻¹</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula green">AB = [[0, 3],[7, 0]]  →  det = -21 ≠ 0
+
+(AB)⁻¹ = [[ 0,   1/7],
+           [1/3,    0]]</div>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-num">Question 4 — (f∘g)²</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula green">(f∘g)²(x,y) = 21·(x,y)   (homothétie de rapport 21)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exo-block">
+    <div class="exo-header" onclick="toggleExo(this)">
+      <span class="exo-num">Exercice 3</span>
+      <span class="exo-title">u sur ℝ₂[X] · Matrice A · Ker, Im · Changement de base</span>
+      <span class="exo-toggle">+</span>
+    </div>
+    <div class="exo-body">
+      <p style="font-size:14px;color:var(--text2);margin-bottom:14px">u(P) = ∫₀ˣ [t·P'(t) − (1+t+t²)·P''(t)] dt</p>
+      <div class="question">
+        <div class="question-num">Question 1 — Matrice A dans B = (1, X, X²)</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula green">A = [[ 0,  0,  0],
+     [ 0,  0, -2],
+     [ 0, 1/2,-1]]</div>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-num">Questions 2 &amp; 3 — Ker(u) et Im(u)</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula green">Ker(u) = vect(1)   →  dim Ker = 1
+Im(u) = vect(X², 1+X)  →  dim Im = 2</div>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-num">Questions 4–6 — Base B₁ et matrice A'</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula green">Relation : A' = P⁻¹·A·P  (matrices semblables → même endomorphisme)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exo-block">
+    <div class="exo-header" onclick="toggleExo(this)">
+      <span class="exo-num">Exercice 4</span>
+      <span class="exo-title">Mα · Valeurs propres α−1, α+2 · Base B₁ · Mαⁿ</span>
+      <span class="exo-toggle">+</span>
+    </div>
+    <div class="exo-body">
+      <p style="font-size:14px;color:var(--text2);margin-bottom:14px">Mα = [[α,0,-1],[2,α,β],[-3-β,-1,α]]</p>
+      <div class="question">
+        <div class="question-num">Questions 1 — Espaces propres</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula">Pour λ = α-1 : v₁ = (1, -2-β, 1)
+Pour λ = α+2 : v₃ = (1, 1-β, -2)</div>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-num">Questions 3–5 — Jordan et Mαⁿ</div>
+        <button class="answer-btn" onclick="toggleAnswer(this)">▷ Voir la correction</button>
+        <div class="answer-box">
+          <div class="formula green">Mαⁿ = P · Nαⁿ · P⁻¹
+
+Nαⁿ = [[(α-1)ⁿ, n(α-1)^(n-1), 0],
+        [0,       (α-1)ⁿ,       0],
+        [0,        0,         (α+2)ⁿ]]
+
+fα automorphisme ⟺ α ≠ 1 et α ≠ -2</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- PAGE 6: QUIZ                                                   -->
+<!-- ============================================================ -->
+<div class="page" id="page-quiz">
+  <div class="page-header">
+    <div class="page-label">Entraînement interactif</div>
+    <div class="page-title">Quiz — Algèbre linéaire</div>
+    <div class="page-sub">10 questions couvrant les deux séries</div>
+  </div>
+  <div id="quiz-container"></div>
+  <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <button onclick="resetQuiz()" style="font-family:var(--mono);font-size:12px;padding:8px 18px;border-radius:7px;border:1px solid var(--border2);background:var(--bg2);color:var(--text2);cursor:pointer">↺ Recommencer</button>
+    <div id="quiz-score" style="font-family:var(--mono);font-size:12px;color:var(--text3)"></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /site -->
+
+<script>
+/* ── Quiz data ── */
+const QUIZ=[
+  {q:"Que vaut det([[1,3],[2,4]]) ?",opts:["2","−2","6","10"],ans:1,exp:"1·4 − 3·2 = 4−6 = −2"},
+  {q:"Si f : ℝ³→ℝ², que dit le théorème du rang ?",opts:["dim Ker + dim Im = 3","dim Ker = 1","dim Im = 3","dim Ker = dim Im"],ans:0,exp:"dim Ker(f) + dim Im(f) = dim(domaine) = 3"},
+  {q:"Combien de matrices B commutent avec [[a,b],[0,a]] (b≠0) ?",opts:["Une infinité (famille à 2 paramètres)","Seulement I₂","Seulement les multiples de I","Aucune"],ans:0,exp:"B = pI + qN, deux paramètres libres p et q"},
+  {q:"Si N³ = 0, que vaut Nⁿ pour n ≥ 3 ?",opts:["0","N","I","N³"],ans:0,exp:"Par définition de la nilpotence : Nⁿ = 0 dès que n ≥ indice de nilpotence"},
+  {q:"Quelle est la formule du cofacteur Cᵢₖ ?",opts:["(−1)^(i+k) × mineur(i,k)","(−1)^(i·k) × mineur","mineur(i,k) seul","(i+k) × det A"],ans:0,exp:"Cᵢₖ = (−1)^(i+k) × M_ik où M_ik est le mineur de l'élément (i,k)"},
+  {q:"Si A² = 4A et A ≠ 4I, alors...",opts:["det(A) = 0, A non inversible","det(A) = 16","A = 0","A est diagonale"],ans:0,exp:"A(A−4I)=0 et A≠4I → A est un diviseur de zéro → det(A)=0"},
+  {q:"La matrice de φ : f→f' dans S=(cos,sin,exp) est ?",opts:["[[0,1,0],[−1,0,0],[0,0,1]]","[[1,0,0],[0,1,0],[0,0,1]]","[[0,−1,0],[1,0,0],[0,0,1]]","[[−1,0,0],[0,1,0],[0,0,0]]"],ans:0,exp:"cos'=−sin, sin'=cos, exp'=exp → colonnes [0,−1,0], [1,0,0], [0,0,1]"},
+  {q:"La règle de Cramer donne xᵢ = ?",opts:["det(Bᵢ)/det(A)","det(A)/det(Bᵢ)","Bᵢ/A","det(A+Bᵢ)"],ans:0,exp:"xᵢ = det(Bᵢ)/det(A) où Bᵢ = A avec la i-ème colonne remplacée par b"},
+  {q:"A(t)·A(s) = A(t+s). Que vaut A(t)⁻¹ ?",opts:["A(−t)","A(1/t)","ᵀA(t)","−A(t)"],ans:0,exp:"A(t)·A(−t) = A(0) = I₃, donc A(t)⁻¹ = A(−t)"},
+  {q:"Pour l'endomorphisme u (série 3, ex. 3), dim(Ker u) = ?",opts:["1","0","2","3"],ans:0,exp:"Ker(u) = vect(1), les polynômes constants → dimension 1"}
+];
+
+let answered=new Set(),correct=0;
+
+function buildQuiz(){
+  document.getElementById('quiz-container').innerHTML=QUIZ.map((q,i)=>`
+    <div class="quiz-q" id="qq${i}">
+      <p><span style="font-family:var(--mono);font-size:11px;color:var(--text3)">Q${i+1} / ${QUIZ.length} &nbsp;</span>${q.q}</p>
+      <div class="quiz-opts">${q.opts.map((o,j)=>`<button class="quiz-opt" onclick="answer(${i},${j})">${o}</button>`).join('')}</div>
+      <div class="quiz-feedback" id="qf${i}"></div>
+    </div>`).join('');
+}
+
+function answer(qi,oi){
+  if(answered.has(qi))return;
+  answered.add(qi);
+  const q=QUIZ[qi];
+  const opts=document.querySelectorAll(`#qq${qi} .quiz-opt`);
+  opts[q.ans].classList.add('correct');
+  if(oi!==q.ans)opts[oi].classList.add('wrong');
+  else correct++;
+  opts.forEach(o=>o.style.pointerEvents='none');
+  const fb=document.getElementById('qf'+qi);
+  fb.textContent=(oi===q.ans?'✓ Correct ! ':'✗ Incorrect. ')+q.exp;
+  fb.className='quiz-feedback '+(oi===q.ans?'ok':'nope');
+  document.getElementById('quiz-score').textContent=`Score : ${correct} / ${answered.size} répondu${answered.size>1?'s':''}`;
+  const pct=answered.size/10*100;
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progCount').textContent=answered.size+' / 10 exercices';
+}
+
+function resetQuiz(){answered.clear();correct=0;buildQuiz();document.getElementById('quiz-score').textContent='';}
+
+/* ── Navigation ── */
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  document.querySelector('.main').scrollTo(0,0);
+}
+
+/* ── Exercises ── */
+function toggleExo(header){
+  const body=header.nextElementSibling;
+  const tog=header.querySelector('.exo-toggle');
+  body.classList.toggle('open');
+  tog.classList.toggle('open');
+}
+
+function toggleAnswer(btn){
+  const box=btn.nextElementSibling;
+  box.classList.toggle('open');
+  btn.textContent=box.classList.contains('open')?'▽ Masquer':'▷ Voir la correction';
+}
+
+/* ── Search ── */
+function filterNav(v){
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    n.style.display=n.textContent.toLowerCase().includes(v.toLowerCase())?'':'none';
+  });
+}
+
+/* ── Gauss stepper ── */
+function gs(n){
+  document.querySelectorAll('.gauss-step').forEach((el,i)=>el.classList.toggle('active',i===n));
+  document.querySelectorAll('#gauss-steps ~ .gauss-nav button').forEach((b,i)=>b.classList.toggle('on',i===n));
+  document.getElementById('gctr').textContent=(n+1)+' / 4';
+}
+
+/* ── YouTube loader ── */
+function ytLoad(thumb,id){
+  const slot=document.getElementById('yt-'+id);
+  if(!slot)return;
+  slot.innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1" allowfullscreen allow="autoplay; encrypted-media"></iframe>';
+  slot.style.display='block';
+  thumb.style.display='none';
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
